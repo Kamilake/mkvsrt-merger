@@ -20,7 +20,7 @@ echo         또는
 echo         conv ^<폴더^> [/R]
 echo         또는
 echo         conv ^<비디오^>
-echo         (^* 비디오만 선택한다면 자막은 같은 이름을 가지고 .srt .ko.srt .kor.srt .ko.kor.srt .smi.srt .smi.ko.srt .smi.kor.srt .smi.ko.kor.srt 확장자를 가지고 있어야 합니다.)
+echo         (^* 비디오만 선택한다면 자막은 같은 이름을 가지고 .srt .ko.srt .kor.srt .ko.kor.srt .smi.srt .smi.ko.srt .smi.kor.srt .smi.ko.kor.srt .ass .ko.ass .kor.ass .ko.kor.ass .smi.ass .smi.ko.ass .smi.kor.ass .smi.ko.kor.ass 확장자를 가지고 있어야 합니다.)
 echo.
 GOTO END
 
@@ -38,6 +38,12 @@ echo 파일 1개 선택됨
  IF EXIST "%~p1%~n1.kor.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=kor "%~p1%~n1_subs%~x1")
  IF EXIST "%~p1%~n1.ko.kor.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=kor "%~p1%~n1_subs%~x1")
 
+ IF EXIST "%~p1%~n1.ass" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=kor "%~p1%~n1_subs%~x1")
+ IF EXIST "%~p1%~n1.ko.ass" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=kor "%~p1%~n1_subs%~x1")
+ IF EXIST "%~p1%~n1.kor.ass" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.kor.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=kor "%~p1%~n1_subs%~x1")
+ IF EXIST "%~p1%~n1.ko.kor.ass" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.kor.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=kor "%~p1%~n1_subs%~x1")
+
+
 GOTO END
 :ONEFILE_ONEDIR
 echo 폴더 1개 선택됨
@@ -48,6 +54,12 @@ FOR /R %1 %%X IN (*.mp4 *.mkv) DO (
  IF EXIST "%%~pX%%~nX.ko.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=kor "%%~pX%%~nX_subs%%~xX")
  IF EXIST "%%~pX%%~nX.kor.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=kor "%%~pX%%~nX_subs%%~xX")
  IF EXIST "%%~pX%%~nX.ko.kor.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=kor "%%~pX%%~nX_subs%%~xX")
+ 
+ IF EXIST "%%~pX%%~nX.ass" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=kor "%%~pX%%~nX_subs%%~xX")
+ IF EXIST "%%~pX%%~nX.ko.ass" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=kor "%%~pX%%~nX_subs%%~xX")
+ IF EXIST "%%~pX%%~nX.kor.ass" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.kor.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=kor "%%~pX%%~nX_subs%%~xX")
+ IF EXIST "%%~pX%%~nX.ko.kor.ass" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.kor.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=kor "%%~pX%%~nX_subs%%~xX")
+ 
  echo .
 )
 
