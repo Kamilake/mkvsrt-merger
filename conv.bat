@@ -1,7 +1,7 @@
 @echo off
 chcp 949
 echo [This file encoding = EUC-KR]
-echo ==MKV/MP4 SRT 병합 스크립트==
+echo ==MKV/MP4 SRT 병합 스크립트 2020.04.13==
 echo ==Kamilake 제작==
 setlocal
 
