@@ -26,4 +26,4 @@ video.mkv(mp4) + video.srt = video_subs.mkv
 
 smi?
 ====
-SAMI(.smi) 자막은 자동으로 SubRip(`.srt`) 자막으로 변환되어 같은 폴더에 저장됩니다.(설정에서 제어 가능)
+SAMI(`.smi`) 자막은 자동으로 SubRip(`.srt`) 자막으로 변환되어 같은 폴더에 저장됩니다.(설정에서 제어 가능)
