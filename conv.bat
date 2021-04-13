@@ -1,4 +1,5 @@
-@REM @echo off
+@echo off
+chcp 949
 echo [This file encoding = EUC-KR]
 echo ==MKV/MP4 SRT 병합 스크립트==
 echo ==Kamilake 제작==
@@ -33,7 +34,7 @@ GOTO END
 IF EXIST %1\* GOTO ONEFILE_ONEDIR
 echo 파일 1개 선택됨
  IF EXIST "%~p1%~n1.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=kor "%~p1%~n1_subs%~x1")
- IF EXIST "%~p1%~n1.ko.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=kor "%~p1%~n1_subs%~x1")
+ IF EXIST "%~p1%~n1.ko.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=kor "%~p1%~n1_subs%~x1")
  IF EXIST "%~p1%~n1.kor.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=kor "%~p1%~n1_subs%~x1")
  IF EXIST "%~p1%~n1.ko.kor.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=kor "%~p1%~n1_subs%~x1")
 
@@ -44,7 +45,7 @@ echo 폴더 1개 선택됨
 @REM not recursive walk를 원한다면 /r %1을 제거하고 cd %1로 폴더에 들어가야 한다.
 FOR /R %1 %%X IN (*.mp4 *.mkv) DO (
  IF EXIST "%%~pX%%~nX.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=kor "%%~pX%%~nX_subs%%~xX")
- IF EXIST "%%~pX%%~nX.ko.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=kor "%%~pX%%~nX_subs%%~xX")
+ IF EXIST "%%~pX%%~nX.ko.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=kor "%%~pX%%~nX_subs%%~xX")
  IF EXIST "%%~pX%%~nX.kor.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=kor "%%~pX%%~nX_subs%%~xX")
  IF EXIST "%%~pX%%~nX.ko.kor.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=kor "%%~pX%%~nX_subs%%~xX")
  echo .
@@ -70,7 +71,9 @@ GOTO END
 :END
 pause
 exit
-이 아래는 제작자의 메모장입니다
+
+메모장
+
 ffmpeg -i input.mp4 -f srt -i input.srt \
  -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy \
  -c:s srt  output.mkv
