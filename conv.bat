@@ -48,6 +48,11 @@ GOTO END
 :ONEFILE
 IF EXIST %1\* GOTO ONEFILE_ONEDIR
 echo 파일 1개 선택됨
+IF "%Kamiconv_SAMI_to_SubRip%" == "n" GOTO ONEFILE_ENDSMITOSRT
+IF EXIST "%~p1%~n1.smi" (ffmpeg -i "%~1" "%~p1%~n1.srt" -%Kamiconv_Overwrite%)
+:ONEFILE_ENDSMITOSRT
+
+
  IF EXIST "%~p1%~n1.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs%~x1")
  IF EXIST "%~p1%~n1.ko.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs%~x1")
  IF EXIST "%~p1%~n1.kor.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs%~x1")
@@ -63,6 +68,7 @@ GOTO END
 :ONEFILE_ONEDIR
 echo 폴더 1개 선택됨
 @REM 출력파일명 "%%~pX%%~nX_subs%%~xX"
+
 IF "%Kamiconv_SAMI_to_SubRip%" == "n" GOTO ONEFILE_ONEDIR_ENDSMITOSRT
 FOR /R %1 %%X IN (*.smi) DO (ffmpeg -i "%%X" "%%~pX%%~nX.srt" -%Kamiconv_Overwrite%)
 :ONEFILE_ONEDIR_ENDSMITOSRT
