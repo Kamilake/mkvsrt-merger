@@ -1,4 +1,4 @@
-@echo off
+@REM @echo off
 @REM [This file encoding = EUC-KR]
 @REM 아래에서 원하는 옵션을 켜고 끄거나 설정하세요.
 
@@ -8,12 +8,11 @@ SET Kamiconv_Language=kor
 @REM 기존에 파일이 있을 때 덮어쓸까요? (y/n)
 SET Kamiconv_Overwrite=n
 
-@REM .smi 자막을 자동으로 .srt로 변환 (y/n)
-SET Kamiconv_SAMI_to_SubRip =n
+@REM .smi 자막을 발견하면 자동으로 .srt로 변환 (y/n)
+SET Kamiconv_SAMI_to_SubRip=y
 
 
 
-%Kamiconv_Language%
 
 
 chcp 949
@@ -49,32 +48,38 @@ GOTO END
 :ONEFILE
 IF EXIST %1\* GOTO ONEFILE_ONEDIR
 echo 파일 1개 선택됨
- IF EXIST "%~p1%~n1.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% "%~p1%~n1_subs%~x1")
- IF EXIST "%~p1%~n1.ko.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% "%~p1%~n1_subs%~x1")
- IF EXIST "%~p1%~n1.kor.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% "%~p1%~n1_subs%~x1")
- IF EXIST "%~p1%~n1.ko.kor.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% "%~p1%~n1_subs%~x1")
+ IF EXIST "%~p1%~n1.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs%~x1")
+ IF EXIST "%~p1%~n1.ko.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs%~x1")
+ IF EXIST "%~p1%~n1.kor.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs%~x1")
+ IF EXIST "%~p1%~n1.ko.kor.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs%~x1")
 
- IF EXIST "%~p1%~n1.ass" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% "%~p1%~n1_subs%~x1")
- IF EXIST "%~p1%~n1.ko.ass" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% "%~p1%~n1_subs%~x1")
- IF EXIST "%~p1%~n1.kor.ass" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.kor.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% "%~p1%~n1_subs%~x1")
- IF EXIST "%~p1%~n1.ko.kor.ass" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.kor.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% "%~p1%~n1_subs%~x1")
+ IF EXIST "%~p1%~n1.ass" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs%~x1")
+ IF EXIST "%~p1%~n1.ko.ass" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs%~x1")
+ IF EXIST "%~p1%~n1.kor.ass" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.kor.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs%~x1")
+ IF EXIST "%~p1%~n1.ko.kor.ass" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.kor.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs%~x1")
 
 
 GOTO END
 :ONEFILE_ONEDIR
 echo 폴더 1개 선택됨
 @REM 출력파일명 "%%~pX%%~nX_subs%%~xX"
+IF "%Kamiconv_SAMI_to_SubRip%" == "n" GOTO ONEFILE_ONEDIR_ENDSMITOSRT
+FOR /R %1 %%X IN (*.smi) DO (ffmpeg -i "%%X" "%%~pX%%~nX.srt" -%Kamiconv_Overwrite%)
+:ONEFILE_ONEDIR_ENDSMITOSRT
+
+
+
 @REM not recursive walk를 원한다면 /r %1을 제거하고 cd %1로 폴더에 들어가야 한다.
 FOR /R %1 %%X IN (*.mp4 *.mkv) DO (
- IF EXIST "%%~pX%%~nX.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% "%%~pX%%~nX_subs%%~xX")
- IF EXIST "%%~pX%%~nX.ko.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% "%%~pX%%~nX_subs%%~xX")
- IF EXIST "%%~pX%%~nX.kor.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% "%%~pX%%~nX_subs%%~xX")
- IF EXIST "%%~pX%%~nX.ko.kor.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% "%%~pX%%~nX_subs%%~xX")
+ IF EXIST "%%~pX%%~nX.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs%%~xX")
+ IF EXIST "%%~pX%%~nX.ko.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs%%~xX")
+ IF EXIST "%%~pX%%~nX.kor.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs%%~xX")
+ IF EXIST "%%~pX%%~nX.ko.kor.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.kor.srt" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs%%~xX")
  
- IF EXIST "%%~pX%%~nX.ass" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% "%%~pX%%~nX_subs%%~xX")
- IF EXIST "%%~pX%%~nX.ko.ass" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% "%%~pX%%~nX_subs%%~xX")
- IF EXIST "%%~pX%%~nX.kor.ass" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.kor.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% "%%~pX%%~nX_subs%%~xX")
- IF EXIST "%%~pX%%~nX.ko.kor.ass" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.kor.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% "%%~pX%%~nX_subs%%~xX")
+ IF EXIST "%%~pX%%~nX.ass" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs%%~xX")
+ IF EXIST "%%~pX%%~nX.ko.ass" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs%%~xX")
+ IF EXIST "%%~pX%%~nX.kor.ass" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.kor.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs%%~xX")
+ IF EXIST "%%~pX%%~nX.ko.kor.ass" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.kor.ass" -map 0:0 -map 0:1 -map 1:0 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs%%~xX")
  
  echo .
 )
