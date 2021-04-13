@@ -21,3 +21,6 @@ video.mkv(mp4) + video.srt = video_subs.mkv
 `.srt` `.ko.srt` `.kor.srt` `.ko.kor.srt` `.smi.srt` `.smi.ko.srt` `.smi.kor.srt` `.smi.ko.kor.srt`
 `.ass` `.ko.ass` `.kor.ass` `.ko.kor.ass`
 `.smi.ass` `.smi.ko.ass` `.smi.kor.ass` `.smi.ko.kor.ass` 확장자를 가지고 있어야 합니다.)
+smi?
+----
+SAMI(.smi) 자막은 자동으로 SubRip(.srt) 자막으로 변환되어 같은 폴더에 저장됩니다.(설정에서 제어 가능)
