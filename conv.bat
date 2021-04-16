@@ -11,6 +11,9 @@ SET Kamiconv_Overwrite=n
 @REM .smi 자막을 발견하면 자동으로 .srt로 변환 (y/n)
 SET Kamiconv_SAMI_to_SubRip=y
 
+@REM 자막 인코딩 (EUC-KR, UTF-8 etc...)
+SET Kamiconv_Encoding=UTF-8
+
 
 
 
@@ -48,7 +51,7 @@ GOTO END
 IF EXIST %1\* GOTO ONEFILE_ONEDIR
 echo 파일 1개 선택됨
 IF "%Kamiconv_SAMI_to_SubRip%" == "n" GOTO ONEFILE_ENDSMITOSRT
-IF EXIST "%~p1%~n1.smi" (ffmpeg -i "%~p1%~n1.smi" "%~p1%~n1.srt" -%Kamiconv_Overwrite%)
+IF EXIST "%~p1%~n1.smi" (ffmpeg -i "%~p1%~n1.smi" "%~p1%~n1.srt" -sub_charenc %Kamiconv_Encoding% -%Kamiconv_Overwrite%)
 :ONEFILE_ENDSMITOSRT
 
 
@@ -69,7 +72,7 @@ echo 폴더 1개 선택됨
 @REM 출력파일명 "%%~pX%%~nX_subs%%~xX"
 
 IF "%Kamiconv_SAMI_to_SubRip%" == "n" GOTO ONEFILE_ONEDIR_ENDSMITOSRT
-FOR /R %1 %%X IN (*.smi) DO (ffmpeg -i "%%X" "%%~pX%%~nX.srt" -%Kamiconv_Overwrite%)
+FOR /R %1 %%X IN (*.smi) DO (ffmpeg -i "%%X" "%%~pX%%~nX.srt" -sub_charenc %Kamiconv_Encoding% -%Kamiconv_Overwrite%)
 :ONEFILE_ONEDIR_ENDSMITOSRT
 
 
