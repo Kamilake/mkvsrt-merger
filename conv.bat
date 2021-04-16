@@ -12,7 +12,7 @@ SET Kamiconv_Overwrite=n
 SET Kamiconv_SAMI_to_SubRip=y
 
 @REM 자막 인코딩 (cp949, EUC-KR, UTF-8 etc...)
-SET Kamiconv_Encoding=UTF-8S
+SET Kamiconv_Encoding=UTF-8
 
 
 
