@@ -1,4 +1,5 @@
-@REM Encoding: EUC-KR .. юз╦╥ а╕╟е©К ╣╣╠╦ют╢о╢ы.
+@REM Encoding: UTF-8.. Л·░К╖┴ Л═°Й╠╟Л ╘ К▐└Й╣╛Л·┘К▀┬К▀╓.
+chcp 65001
 ffmpeg -i "%~1" -c copy -map 0 "%~p1%~n1.copy%~x1"
 FOR /R %1 %%X IN (*.mkv *.mp4) DO (ffmpeg -i "%%X" -c copy -map 0 "%%~pX%%~nX.copy%%~xX")
 pause
