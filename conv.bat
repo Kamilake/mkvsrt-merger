@@ -16,8 +16,7 @@ SET Kamiconv_Encoding=UTF-8
 
 
 
-chcp 65001
-echo [This file encoding = UTF-8]
+chcp 65001 > nul
 echo ==MKV/MP4 SRT 병합 스크립트 2020.04.24==
 echo ==Kamilake 제작==
 setlocal
@@ -119,7 +118,8 @@ echo 파일 3개 선택됨 (아직 구현 안했어용)
 GOTO END
 
 :END
-pause
+echo 종료하려면 아무 키나 누르십시오...
+pause > nul
 exit
 
 메모장
