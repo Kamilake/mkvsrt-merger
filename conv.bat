@@ -1,4 +1,5 @@
-@echo off
+@REM @echo off
+chcp 65001 > nul
 @REM [This file encoding = UTF-8]
 @REM 아래에서 원하는 옵션을 켜고 끄거나 설정하세요.
 
@@ -11,13 +12,27 @@ SET Kamiconv_Overwrite=n
 @REM .smi 자막을 발견하면 자동으로 .srt로 변환 (y/n)
 SET Kamiconv_SAMI_to_SubRip=y
 
-@REM 자막 인코딩 (cp949, EUC-KR, UTF-8 etc...)
-SET Kamiconv_Encoding=UTF-8
+@REM 자막 인코딩 (auto, cp949, EUC-KR, UTF-8 etc...)
+SET Kamiconv_Encoding=auto
+@REM SET Kamiconv_Encoding=-sub_charenc UTF-8
 
+@REM ================================================================================
+@REM ================================================================================
+@REM ================================================================================
+@REM ================================================================================
+@REM ================================================================================
 
+IF "%Kamiconv_Encoding%" == "auto" goto Kamiconv_Encoding_Auto
+IF "%Kamiconv_Encoding%" == "AUTO" goto Kamiconv_Encoding_Auto
+@REM 자동이 아니면 매개변수로 설정
+SET Kamiconv_Encoding=-sub_charenc %Kamiconv_Encoding%
+goto Kamiconv_Encoding_Auto_End
+:Kamiconv_Encoding_Auto
+@REM 자동이면 공백으로 설정 (주의! 공백 필수)
+SET Kamiconv_Encoding= 
+:Kamiconv_Encoding_Auto_End
 
-chcp 65001 > nul
-echo ==MKV/MP4 SRT 병합 스크립트 2020.04.24==
+echo ==MKV/MP4 SRT 병합 스크립트 2021.05.09==
 echo ==Kamilake 제작==
 setlocal
 
@@ -49,7 +64,7 @@ GOTO END
 IF EXIST %1\* GOTO ONEFILE_ONEDIR
 echo 파일 1개 선택됨
 IF "%Kamiconv_SAMI_to_SubRip%" == "n" GOTO ONEFILE_ENDSMITOSRT
-IF EXIST "%~p1%~n1.smi" (ffmpeg -sub_charenc %Kamiconv_Encoding% -i "%~p1%~n1.smi" "%~p1%~n1.srt" -%Kamiconv_Overwrite%)
+IF EXIST "%~p1%~n1.smi" (ffmpeg %Kamiconv_Encoding% -i "%~p1%~n1.smi" "%~p1%~n1.srt" -%Kamiconv_Overwrite%)
 :ONEFILE_ENDSMITOSRT
 
 
@@ -70,7 +85,7 @@ echo 폴더 1개 선택됨
 @REM 출력파일명 "%%~pX%%~nX_subs%%~xX"
 
 IF "%Kamiconv_SAMI_to_SubRip%" == "n" GOTO ONEFILE_ONEDIR_ENDSMITOSRT
-FOR /R %1 %%X IN (*.smi) DO (ffmpeg -sub_charenc %Kamiconv_Encoding% -i "%%X" "%%~pX%%~nX.srt" -%Kamiconv_Overwrite%)
+FOR /R %1 %%X IN (*.smi) DO (ffmpeg %Kamiconv_Encoding% -i "%%X" "%%~pX%%~nX.srt" -%Kamiconv_Overwrite%)
 :ONEFILE_ONEDIR_ENDSMITOSRT
 
 
