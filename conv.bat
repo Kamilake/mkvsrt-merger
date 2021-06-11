@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 > nul
-@REM [This file encoding = UTF-8]
+@REM [The encoding of this file = UTF-8]
 @REM 아래에서 원하는 옵션을 켜고 끄거나 설정하세요.
 
 @REM 언어 선택(kor,eng,jpn etc..)
