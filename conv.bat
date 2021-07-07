@@ -1,5 +1,6 @@
 @echo off
 chcp 65001 > nul
+cls
 @REM [The encoding of this file = UTF-8]
 @REM 아래에서 원하는 옵션을 켜고 끄거나 설정하세요.
 
