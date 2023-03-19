@@ -24,17 +24,20 @@ SET Kamiconv_Encoding=auto
 @REM ================================================================================
 @REM ================================================================================
 
+@REM 자동이 아니면 플래그로 지정
 IF "%Kamiconv_Encoding%" == "auto" goto Kamiconv_Encoding_Auto
 IF "%Kamiconv_Encoding%" == "AUTO" goto Kamiconv_Encoding_Auto
-@REM 자동이 아니면 플래그로 지정
+
+@REM 자동이 아닌 Manual일 시 Auto 구간 스킵
 SET Kamiconv_Encoding=-sub_charenc %Kamiconv_Encoding%
 goto Kamiconv_Encoding_Auto_End
+
 :Kamiconv_Encoding_Auto
 @REM 자동이면 공백으로 (주의! 공백 필수)
 SET Kamiconv_Encoding= 
 :Kamiconv_Encoding_Auto_End
 
-echo ==MKV/MP4 SRT 병합 스크립트 2021.05.09==
+echo ==MKV/MP4 SRT 병합 스크립트 2023.03.18==
 echo ==Kamilake 제작==
 setlocal
 
@@ -66,76 +69,120 @@ GOTO END
 IF EXIST %1\* GOTO ONEFILE_ONEDIR
 echo 파일 1개 선택됨
 IF "%Kamiconv_SAMI_to_SubRip%" == "n" GOTO ONEFILE_ENDSMITOSRT
-IF EXIST "%~p1%~n1.smi" (ffmpeg %Kamiconv_Encoding% -i "%~p1%~n1.smi" "%~p1%~n1.srt" -%Kamiconv_Overwrite%)
+IF EXIST "%~pn1.smi" (ffmpeg %Kamiconv_Encoding% -i "%~pn1.smi" "%~pn1.srt" -%Kamiconv_Overwrite%)
+
 :ONEFILE_ENDSMITOSRT
+IF EXIST "%~pn1.srt" (ffmpeg -i "%~1" -f srt -i "%~pn1.srt" -map 0 -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~pn1_subs.mkv")
+IF EXIST "%~pn1.ko.srt" (ffmpeg -i "%~1" -f srt -i "%~pn1.ko.srt" -map 0 -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~pn1_subs.mkv")
+IF EXIST "%~pn1.kor.srt" (ffmpeg -i "%~1" -f srt -i "%~pn1.kor.srt" -map 0 -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~pn1_subs.mkv")
+IF EXIST "%~pn1.ko.kor.srt" (ffmpeg -i "%~1" -f srt -i "%~pn1.ko.kor.srt" -map 0 -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~pn1_subs.mkv")
 
-
- IF EXIST "%~p1%~n1.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.srt" -map 0 -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs.mkv")
- IF EXIST "%~p1%~n1.ko.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.srt" -map 0 -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs.mkv")
- IF EXIST "%~p1%~n1.kor.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.kor.srt" -map 0 -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs.mkv")
- IF EXIST "%~p1%~n1.ko.kor.srt" (ffmpeg -i "%~1" -f srt -i "%~p1%~n1.ko.kor.srt" -map 0 -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs.mkv")
-
- IF EXIST "%~p1%~n1.ass" (ffmpeg -i "%~1" -f ass -i "%~p1%~n1.ass" -map 0 -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs.mkv")
- IF EXIST "%~p1%~n1.ko.ass" (ffmpeg -i "%~1" -f ass -i "%~p1%~n1.ko.ass" -map 0 -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs.mkv")
- IF EXIST "%~p1%~n1.kor.ass" (ffmpeg -i "%~1" -f ass -i "%~p1%~n1.kor.ass" -map 0 -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs.mkv")
- IF EXIST "%~p1%~n1.ko.kor.ass" (ffmpeg -i "%~1" -f ass -i "%~p1%~n1.ko.kor.ass" -map 0 -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~p1%~n1_subs.mkv")
-
-
+IF EXIST "%~pn1.ass" (ffmpeg -i "%~1" -f ass -i "%~pn1.ass" -map 0 -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~pn1_subs.mkv")
+IF EXIST "%~pn1.ko.ass" (ffmpeg -i "%~1" -f ass -i "%~pn1.ko.ass" -map 0 -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~pn1_subs.mkv")
+IF EXIST "%~pn1.kor.ass" (ffmpeg -i "%~1" -f ass -i "%~pn1.kor.ass" -map 0 -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~pn1_subs.mkv")
+IF EXIST "%~pn1.ko.kor.ass" (ffmpeg -i "%~1" -f ass -i "%~pn1.ko.kor.ass" -map 0 -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%~pn1_subs.mkv")
 GOTO END
+
 :ONEFILE_ONEDIR
 echo 폴더 1개 선택됨
-@REM 출력파일명 "%%~pX%%~nX_subs%%~xX"
 
+@REM 출력파일명 "%%~pnF_subs%%~xF"
 IF "%Kamiconv_SAMI_to_SubRip%" == "n" GOTO ONEFILE_ONEDIR_ENDSMITOSRT
-FOR /R %1 %%X IN (*.smi) DO (ffmpeg %Kamiconv_Encoding% -i "%%X" "%%~pX%%~nX.srt" -%Kamiconv_Overwrite%)
+FOR /R %1 %%F IN (*.smi) DO (ffmpeg %Kamiconv_Encoding% -i "%%F" "%%~pnF.srt" -%Kamiconv_Overwrite%)
 :ONEFILE_ONEDIR_ENDSMITOSRT
 
+IF EXIST "%1\*.ass" (
+  GOTO ASS
+) ELSE (
+  GOTO ENCODE
+)
 
+:ASS
+@REM 폰트 체크
 setlocal EnableDelayedExpansion
+FOR /F "tokens=*" %%F IN ('powershell.exe -ExecutionPolicy Bypass -File .\assfontfinder.ps1 %1') DO (
+    SET "FILENAMES=!FILENAMES! "%%F""
+)
+
+@REM ASS에 있는 폰트들과 병합할 폰트들 체크
+SETLOCAL EnableDelayedExpansion
+SET FLG=0
+SET MISSING=0
 SET Kamiconv_FontEvaluator=
-@REM 폰트 병합
-FOR /R %1 %%X IN (*.ttf *.otf) DO (
-  SET "Kamiconv_FontEvaluator=!Kamiconv_FontEvaluator! -attach "%%~pX%%~nX%%~xX""
+FOR %%N in (%FILENAMES%) DO (
+  SET FLG=0
+  SET BREAK=
+  FOR /R %1\fonts %%F IN (*.ttf *.otf) DO IF NOT DEFINED BREAK (
+    echo %%~nF | find /i %%N > nul
+    IF NOT ERRORLEVEL 1 (
+      SET "INCLUDEFONT=!INCLUDEFONT! -attach "%%~pnFF""
+      SET FLG=1
+      echo Include : %%N
+      SET BREAK=YES
+    )
+  )
+  IF !FLG! EQU 0 (
+    SET "MISSINGFONT=!MISSINGFONT! %%N"
+    SET MISSING=1
+    echo Missing : %%N
+  )
 )
 
-@REM  폰트 병합 끝
-echo %Kamiconv_FontEvaluator%
+IF %MISSING% EQU 1 (
+  echo.
+  echo 경고: 현재 누락된 폰트가 있습니다
+  echo 누락된 모든 폰트는 다음과 같습니다: %MISSINGFONT%
+  echo.
+  GOTO SKIPQUES
+) ELSE (
+  echo.
+  echo 모든 폰트가 준비 완료되었습니다!
+  echo.
+  GOTO ENCQUES
+)
 
+:SKIPQUES
+SET /P YN=무시하고 진행하시겠습니까? (Y/N)? 
+:CONFIRM
+IF /I "%YN%" == "y" GOTO ENCODE
+IF /I "%YN%" == "n" GOTO FONTPLZ
+echo Y/y 또는 N/n만 입력해주세요!
+GOTO CONFIRM
 
+:ENCQUES
+SET /P YN=진행하시겠습니까? (Y/N)? 
+:CONFIRM
+IF /I "%YN%" == "y" GOTO ENCODE
+IF /I "%YN%" == "n" GOTO END
+echo Y/y 또는 N/n만 입력해주세요!
+GOTO CONFIRM
 
+:ENCODE
 @REM not recursive walk를 원한다면 /r %1을 제거하고 cd %1로 폴더에 들어가야 한다.
-FOR /R %1 %%X IN (*.mp4 *.mkv) DO (
- IF EXIST "%%~pX%%~nX.SVP%%~xX" (
-
-  IF EXIST "%%~pX%%~nX.srt" (ffmpeg -i "%%~pX%%~nX.SVP%%~xX" -f srt -i "%%~pX%%~nX.srt" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
-  IF EXIST "%%~pX%%~nX.ko.srt" (ffmpeg -i "%%~pX%%~nX.SVP%%~xX" -f srt -i "%%~pX%%~nX.ko.srt" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
-  IF EXIST "%%~pX%%~nX.kor.srt" (ffmpeg -i "%%~pX%%~nX.SVP%%~xX" -f srt -i "%%~pX%%~nX.kor.srt" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
-  IF EXIST "%%~pX%%~nX.ko.kor.srt" (ffmpeg -i "%%~pX%%~nX.SVP%%~xX" -f srt -i "%%~pX%%~nX.ko.kor.srt" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
-  
-  IF EXIST "%%~pX%%~nX.ass" (ffmpeg -i "%%~pX%%~nX.SVP%%~xX" -f ass -i "%%~pX%%~nX.ass" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
-  IF EXIST "%%~pX%%~nX.ko.ass" (ffmpeg -i "%%~pX%%~nX.SVP%%~xX" -f ass -i "%%~pX%%~nX.ko.ass" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
-  IF EXIST "%%~pX%%~nX.kor.ass" (ffmpeg -i "%%~pX%%~nX.SVP%%~xX" -f ass -i "%%~pX%%~nX.kor.ass" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
-  IF EXIST "%%~pX%%~nX.ko.kor.ass" (ffmpeg -i "%%~pX%%~nX.SVP%%~xX" -f ass -i "%%~pX%%~nX.ko.kor.ass" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
- ) ELSE (
-  IF EXIST "%%~pX%%~nX.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.srt" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
-  IF EXIST "%%~pX%%~nX.ko.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.srt" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
-  IF EXIST "%%~pX%%~nX.kor.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.kor.srt" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
-  IF EXIST "%%~pX%%~nX.ko.kor.srt" (ffmpeg -i "%%X" -f srt -i "%%~pX%%~nX.ko.kor.srt" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
-  
-  IF EXIST "%%~pX%%~nX.ass" (ffmpeg -i "%%X" -f ass -i "%%~pX%%~nX.ass" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
-  IF EXIST "%%~pX%%~nX.ko.ass" (ffmpeg -i "%%X" -f ass -i "%%~pX%%~nX.ko.ass" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
-  IF EXIST "%%~pX%%~nX.kor.ass" (ffmpeg -i "%%X" -f ass -i "%%~pX%%~nX.kor.ass" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
-  IF EXIST "%%~pX%%~nX.ko.kor.ass" (ffmpeg -i "%%X" -f ass -i "%%~pX%%~nX.ko.kor.ass" -map 0 %Kamiconv_FontEvaluator% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pX%%~nX_subs.mkv")
- )
-
- echo .
+FOR /R %1 %%F IN (*.mp4 *.mkv) DO (
+  IF EXIST "%%~pnF.SVP%%~xF" (
+    IF EXIST "%%~pnF.srt" (ffmpeg -i "%%~pnF.SVP%%~xF" -f srt -i "%%~pnF.srt" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+    IF EXIST "%%~pnF.ko.srt" (ffmpeg -i "%%~pnF.SVP%%~xF" -f srt -i "%%~pnF.ko.srt" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+    IF EXIST "%%~pnF.kor.srt" (ffmpeg -i "%%~pnF.SVP%%~xF" -f srt -i "%%~pnF.kor.srt" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+    IF EXIST "%%~pnF.ko.kor.srt" (ffmpeg -i "%%~pnF.SVP%%~xF" -f srt -i "%%~pnF.ko.kor.srt" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+    
+    IF EXIST "%%~pnF.ass" (ffmpeg -i "%%~pnF.SVP%%~xF" -f ass -i "%%~pnF.ass" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+    IF EXIST "%%~pnF.ko.ass" (ffmpeg -i "%%~pnF.SVP%%~xF" -f ass -i "%%~pnF.ko.ass" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+    IF EXIST "%%~pnF.kor.ass" (ffmpeg -i "%%~pnF.SVP%%~xF" -f ass -i "%%~pnF.kor.ass" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+    IF EXIST "%%~pnF.ko.kor.ass" (ffmpeg -i "%%~pnF.SVP%%~xF" -f ass -i "%%~pnF.ko.kor.ass" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+  ) ELSE (
+    IF EXIST "%%~pnF.srt" (ffmpeg -i "%%F" -f srt -i "%%~pnF.srt" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+    IF EXIST "%%~pnF.ko.srt" (ffmpeg -i "%%F" -f srt -i "%%~pnF.ko.srt" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+    IF EXIST "%%~pnF.kor.srt" (ffmpeg -i "%%F" -f srt -i "%%~pnF.kor.srt" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+    IF EXIST "%%~pnF.ko.kor.srt" (ffmpeg -i "%%F" -f srt -i "%%~pnF.ko.kor.srt" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s srt -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+    
+    IF EXIST "%%~pnF.ass" (ffmpeg -i "%%F" -f ass -i "%%~pnF.ass" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+    IF EXIST "%%~pnF.ko.ass" (ffmpeg -i "%%F" -f ass -i "%%~pnF.ko.ass" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+    IF EXIST "%%~pnF.kor.ass" (ffmpeg -i "%%F" -f ass -i "%%~pnF.kor.ass" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+    IF EXIST "%%~pnF.ko.kor.ass" (ffmpeg -i "%%F" -f ass -i "%%~pnF.ko.kor.ass" -map 0 %INCLUDEFONT% -metadata:s:t mimetype=application/x-truetype-font -map 1 -c:v copy -c:a copy -c:s ass -metadata:s:s:0 language=%Kamiconv_Language% -%Kamiconv_Overwrite% "%%~pnF_subs.mkv")
+  )
 )
-
-
-
-
 GOTO END
-
 
 :TWOFILE
 echo 파일 2개 선택됨 (아직 구현 안했어용)
@@ -145,49 +192,12 @@ GOTO END
 echo 파일 3개 선택됨 (아직 구현 안했어용)
 GOTO END
 
+:FONTPLZ
+echo.
+echo 모든 폰트 파일을 이름에 맞게 준비 후 %1\fonts 안에 넣어주신 뒤 다시 실행해주세요.
+GOTO END
+
 :END
 echo 종료하려면 아무 키나 누르십시오...
 pause > nul
 exit
-
-메모장
-
-Ctrl+H
--map 0:0 -map 0:1 -map 1:0
--map 0
--map 0 -map 1:v -map 0:a
-%~xI
-ffmpeg -i input.mp4 -f srt -i input.srt \
- -map 0 -c:v copy -c:a copy \
- -c:s srt  output.mkv
- ffmpeg -i "input"\
- -f srt -i "srt"\
- -map 0 -c:v copy -c:a copy -c:s srt\
- -metadata:s:s:0 language=kor output.mkv
-
-
-해결책
-특정 변수 수정자를 사용해야합니다. 다음은 작동하는 예입니다.
-
-if "%~x1" == ".ext" (echo File extension matches.)
-사용 가능한 수정자
-%~I         - expands %I removing any surrounding quotes (")
-%~fI        - expands %I to a fully qualified path name
-%~dI        - expands %I to a drive letter only
-%~pI        - expands %I to a path only
-%~nI        - expands %I to a file name only
-%~xI        - expands %I to a file extension only
-%~sI        - expanded path contains short names only
-%~aI        - expands %I to file attributes of file
-%~tI        - expands %I to date/time of file
-%~zI        - expands %I to size of file
-%~$PATH:I   - searches the directories listed in the PATH
-               environment variable and expands %I to the
-               fully qualified name of the first one found.
-               If the environment variable name is not
-               defined or the file is not found by the
-               search, then this modifier expands to the
-               empty string
-
-
-               FOR /R [경로] %%변수 IN (집합) DO 명령어
