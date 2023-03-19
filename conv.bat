@@ -91,18 +91,15 @@ IF "%Kamiconv_SAMI_to_SubRip%" == "n" GOTO ONEFILE_ONEDIR_ENDSMITOSRT
 FOR /R %1 %%F IN (*.smi) DO (ffmpeg %Kamiconv_Encoding% -i "%%F" "%%~pnF.srt" -%Kamiconv_Overwrite%)
 :ONEFILE_ONEDIR_ENDSMITOSRT
 
-IF EXIST "%1\*.ass" (
-  GOTO ASS
-) ELSE (
-  GOTO ENCODE
-)
-
-:ASS
 @REM 폰트 체크
 setlocal EnableDelayedExpansion
-FOR /F "tokens=*" %%F IN ('powershell.exe -ExecutionPolicy Bypass -File .\assfontfinder.ps1 %1') DO (
+FOR /F "tokens=*" %%F IN ('powershell.exe -ExecutionPolicy Bypass -File .\fontfinder.ps1 %1') DO (
     SET "FILENAMES=!FILENAMES! "%%F""
 )
+
+IF NOT DEFINED FILENAMES GOTO ENCODE
+
+IF NOT EXIST %1\fonts\* GOTO FONTFOLDERERR
 
 @REM ASS에 있는 폰트들과 병합할 폰트들 체크
 SETLOCAL EnableDelayedExpansion
@@ -130,13 +127,13 @@ FOR %%N in (%FILENAMES%) DO (
 
 IF %MISSING% EQU 1 (
   echo.
-  echo 경고: 현재 누락된 폰트가 있습니다
+  echo 경고: 현재 누락된 폰트가 있습니다^^!
   echo 누락된 모든 폰트는 다음과 같습니다: %MISSINGFONT%
   echo.
   GOTO SKIPQUES
 ) ELSE (
   echo.
-  echo 모든 폰트가 준비 완료되었습니다!
+  echo 모든 폰트가 준비 완료되었습니다^^!
   echo.
   GOTO ENCQUES
 )
@@ -194,7 +191,17 @@ GOTO END
 
 :FONTPLZ
 echo.
-echo 모든 폰트 파일을 이름에 맞게 준비 후 %1\fonts 안에 넣어주신 뒤 다시 실행해주세요.
+echo 모든 폰트 파일을 이름에 맞게 준비 후 %1fonts 안에 넣어주신 뒤 다시 실행해주세요^^!
+GOTO END
+
+:FONTFOLDERERR
+echo.
+echo 경고^^!
+echo 폰트 폴더가 존재하지 않습니다. %~pn1fonts에 다음과 같은 폰트를 넣어주신 뒤 다시 실행해주세요.
+echo 자막에서 요구되는 폰트는 다음과 같습니다:
+FOR %%N in (%FILENAMES%) DO (
+  echo %%N
+)
 GOTO END
 
 :END
